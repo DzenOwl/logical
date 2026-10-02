@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Логические вентили — AND / OR / NOT</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+
+        <div class="container">
+        <header>
+            <div class="eyebrow">Логическая схема</div>
+            <h1>Выключатели и лампочка</h1>
+            <p class="subtitle">Собери цепь и посмотри, как работают AND, OR и NOT</p>
+        </header>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="and">AND · И</button>
+            <button class="mode-btn" data-mode="or">OR · ИЛИ</button>
+            <button class="mode-btn" data-mode="not">NOT · НЕ</button>
+        </div>
+
+        <div class="description" id="description"></div>
+
+        <div class="circuit-panel">
+            <svg viewBox="0 0 520 280" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- ===== common circuit: battery, outer loop, bulb ===== -->
+            <path id="wireBattTop" class="wire" d="M 60 50 L 60 130"></path>
+            <path id="wireBattBottom" class="wire" d="M 60 170 L 60 250"></path>
+            <line class="batt-line" x1="40" y1="140" x2="80" y2="140"></line>
+            <line class="batt-line" x1="48" y1="158" x2="72" y2="158" stroke-width="9"></line>
+            <text class="batt-label" x="16" y="150">+</text>
+            <text class="batt-label" x="14" y="172">−</text>
+
+            <path id="wireLeftStub" class="wire" d="M 60 50 L 150 50"></path>
+            <path id="wireRightStub" class="wire" d="M 370 50 L 460 50"></path>
+            <path id="wireBottom" class="wire" d="M 60 250 L 460 250"></path>
+            <path id="wireBulbTop" class="wire" d="M 460 50 L 460 122"></path>
+            <path id="wireBulbBottom" class="wire" d="M 460 178 L 460 250"></path>
+
+            <!-- bulb -->
+            <g id="bulbGroup">
+                <rect class="bulb-base" x="452" y="170" width="16" height="10" rx="2"></rect>
+                <circle id="bulbGlass" class="bulb-glass" cx="460" cy="150" r="27"></circle>
+                <path id="bulbFilament" class="bulb-filament" d="M 449 160 L 452 138 L 460 152 L 468 138 L 471 160"></path>
+            </g>
+
+            <!-- ===== AND group (series) ===== -->
+            <g id="and-group">
+                <path class="wire and-wire" d="M 150 50 L 160 50"></path>
+                <path class="wire and-wire" d="M 220 50 L 300 50"></path>
+                <path class="wire and-wire" d="M 360 50 L 370 50"></path>
+                <g class="switch" id="sw-and-A" data-switch="A" transform="translate(190,50)">
+                <rect class="track" x="-30" y="-14" width="60" height="28" rx="14"></rect>
+                <circle class="knob" cx="-17" cy="0" r="11"></circle>
+                <text class="switch-label" y="-24">A</text>
+                <text class="switch-state" y="30">ВЫКЛ</text>
+                </g>
+                <g class="switch" id="sw-and-B" data-switch="B" transform="translate(330,50)">
+                <rect class="track" x="-30" y="-14" width="60" height="28" rx="14"></rect>
+                <circle class="knob" cx="-17" cy="0" r="11"></circle>
+                <text class="switch-label" y="-24">B</text>
+                <text class="switch-state" y="30">ВЫКЛ</text>
+                </g>
+            </g>
+
+            <!-- ===== OR group (parallel) ===== -->
+            <g id="or-group" style="display:none">
+                <path class="wire or-wire" d="M 150 50 L 150 20 L 220 20"></path>
+                <path class="wire or-wire" d="M 300 20 L 370 20 L 370 50"></path>
+                <path class="wire or-wire" d="M 150 50 L 150 80 L 220 80"></path>
+                <path class="wire or-wire" d="M 300 80 L 370 80 L 370 50"></path>
+                <circle class="node" cx="150" cy="50" r="4.5"></circle>
+                <circle class="node" cx="370" cy="50" r="4.5"></circle>
+                <g class="switch" id="sw-or-A" data-switch="A" transform="translate(260,20)">
+                <rect class="track" x="-30" y="-14" width="60" height="28" rx="14"></rect>
+                <circle class="knob" cx="-17" cy="0" r="11"></circle>
+                <text class="switch-label" y="-22">A</text>
+                <text class="switch-state" y="26">ВЫКЛ</text>
+                </g>
+                <g class="switch" id="sw-or-B" data-switch="B" transform="translate(260,80)">
+                <rect class="track" x="-30" y="-14" width="60" height="28" rx="14"></rect>
+                <circle class="knob" cx="-17" cy="0" r="11"></circle>
+                <text class="switch-label" y="-22">B</text>
+                <text class="switch-state" y="26">ВЫКЛ</text>
+                </g>
+            </g>
+
+            <!-- ===== NOT group ===== -->
+            <g id="not-group" style="display:none">
+                <path class="wire not-wire" d="M 150 50 L 230 50"></path>
+                <path class="wire not-wire" d="M 290 50 L 370 50"></path>
+                <g class="switch" id="sw-not-A" data-switch="A" transform="translate(260,50)">
+                <rect class="track" x="-30" y="-14" width="60" height="28" rx="14"></rect>
+                <circle class="knob" cx="-17" cy="0" r="11"></circle>
+                <text class="switch-label" y="-24">Кнопка</text>
+                <text class="switch-state" y="30">ВЫКЛ</text>
+                </g>
+            </g>
+
+            </svg>
+        </div>
+
+        <div class="status-row" id="statusRow"></div>
+
+        <div class="truth-table">
+            <h2>Таблица истинности</h2>
+            <table id="truthTable"></table>
+        </div>
+
+        <footer>Нажимай на переключатели, чтобы менять сигналы A и B</footer>
+        </div>
+
+        <script src="script.js"></script>
+
+    </body>
+</html>

@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root{
+  --bg: #171310;
+  --panel: #221d16;
+  --panel-edge: #362c1e;
+  --wire-off: #6b5d47;
+  --wire-on: #ffb238;
+  --bulb-glass: #3a3226;
+  --bulb-glow: #ffd166;
+  --copper: #c9793f;
+  --text: #f1e9db;
+  --muted: #a89c88;
+  --good: #8bd17c;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, #2a2216 0%, transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  display:flex;
+  justify-content:center;
+  padding: 32px 16px 60px;
+}
+
+.container{
+  width: 100%;
+  max-width: 640px;
+}
+
+header{
+  text-align:center;
+  margin-bottom: 22px;
+}
+
+.eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--copper);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+h1{
+  font-size: clamp(24px, 5vw, 32px);
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+
+.subtitle{
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Mode tabs */
+.mode-selector{
+  display:flex;
+  gap: 8px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 12px;
+  padding: 6px;
+  margin: 24px 0 18px;
+}
+
+.mode-btn{
+  flex:1;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family:'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  padding: 10px 6px;
+  border-radius: 8px;
+  cursor:pointer;
+  transition: background .18s, color .18s;
+}
+.mode-btn:hover{ color: var(--text); }
+.mode-btn.active{
+  background: linear-gradient(180deg, #3a2f20, #2c2417);
+  color: var(--bulb-glow);
+  box-shadow: inset 0 0 0 1px var(--copper);
+}
+
+/* description */
+.description{
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-left: 3px solid var(--copper);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  min-height: 44px;
+}
+.description b{ color: var(--text); }
+
+/* circuit panel */
+.circuit-panel{
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 16px;
+  padding: 10px 6px 4px;
+  box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+svg{ width:100%; height:auto; display:block; overflow: visible; }
+
+.wire{
+  fill:none;
+  stroke: var(--wire-off);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke .25s ease;
+}
+.wire.on{ stroke: var(--wire-on); }
+.wire.flow{
+  stroke-dasharray: 9 8;
+  animation: dash 0.7s linear infinite;
+}
+@keyframes dash{ to{ stroke-dashoffset: -17; } }
+
+.node{ fill: var(--wire-off); transition: fill .25s ease; }
+.node.on{ fill: var(--wire-on); }
+
+/* battery */
+.batt-line{ stroke: var(--copper); stroke-width: 5; stroke-linecap: round; }
+.batt-label{
+  font-family:'JetBrains Mono', monospace;
+  font-size: 11px;
+  fill: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* bulb */
+.bulb-glass{
+  fill: var(--bulb-glass);
+  stroke: var(--wire-off);
+  stroke-width: 3.5;
+  transition: fill .3s ease, stroke .3s ease, filter .3s ease;
+}
+.bulb-glass.on{
+  fill: var(--bulb-glow);
+  stroke: var(--wire-on);
+  filter: drop-shadow(0 0 18px var(--bulb-glow)) drop-shadow(0 0 38px rgba(255,209,102,0.55));
+}
+.bulb-filament{
+  fill:none;
+  stroke: var(--wire-off);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke .3s ease;
+}
+.bulb-filament.on{ stroke: #7a5a12; }
+.bulb-base{ fill: #4a4030; }
+
+/* switches */
+.switch{ cursor:pointer; }
+.switch .track{
+  fill: #453b2a;
+  stroke: var(--wire-off);
+  stroke-width: 2.5;
+  transition: fill .2s ease, stroke .2s ease;
+}
+.switch.on .track{ fill: #4a3a1a; stroke: var(--wire-on); }
+.switch .knob{
+  fill: #d8cdb8;
+  stroke: #171310;
+  stroke-width: 1.5;
+  transition: cx .22s ease, fill .22s ease;
+}
+.switch.on .knob{ fill: var(--bulb-glow); }
+.switch .switch-label{
+  font-family:'JetBrains Mono', monospace;
+  font-weight:700;
+  font-size: 13px;
+  fill: var(--text);
+  text-anchor: middle;
+}
+.switch .switch-state{
+  font-family:'JetBrains Mono', monospace;
+  font-size: 9px;
+  fill: var(--muted);
+  text-anchor: middle;
+  letter-spacing: 0.03em;
+}
+
+/* status row */
+.status-row{
+  display:flex;
+  justify-content:center;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin: 18px 0 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+}
+.status-row .chip{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+.dot{ width:9px; height:9px; border-radius:50%; background: var(--wire-off); transition: background .2s, box-shadow .2s; }
+.dot.on{ background: var(--good); box-shadow: 0 0 8px var(--good); }
+
+/* truth table */
+.truth-table{
+  margin-top: 26px;
+}
+.truth-table h2{
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 500;
+  margin: 0 0 10px;
+  text-align:center;
+}
+table{
+  width: 100%;
+  border-collapse: collapse;
+  font-family:'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 10px;
+  overflow:hidden;
+}
+th, td{
+  padding: 9px 6px;
+  text-align:center;
+  border-bottom: 1px solid var(--panel-edge);
+  color: var(--muted);
+}
+th{
+  color: var(--copper);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+}
+tr:last-child td{ border-bottom:none; }
+tr.active-row td{ color: var(--text); background: rgba(255,178,56,0.08); }
+tr.active-row td.result-on{ color: var(--bulb-glow); font-weight: 700; }
+
+footer{
+  text-align:center;
+  margin-top: 26px;
+  font-size: 12px;
+  color: var(--muted);
+  font-family:'JetBrains Mono', monospace;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .wire.flow{ animation: none; }
+}
